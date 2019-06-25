@@ -202,21 +202,29 @@ else
         var roomID = $("#roomBR").val();       
         var priceVal = $("#roomPrice").val();
         var dateToVal = $("#dateTo").val();
-        var dateFromVal = $("#dateFrom").val();      
-             
-        $.ajax({
-            url: "/Guest/BookingSave",
-            type: 'post',
-            data: {room_id: roomID, price: priceVal, dateTo: dateToVal, dateFrom: dateFromVal },
-            success: function () {
-                alert("Soba rezervirana.");
-                ReservedRooms();
-                pp.hide();
-            },
-            error: function (status, error) {
-                alert("An AJAX error occured: " + status + "\nError: " + error);
-            }
-        });
+        var dateFromVal = $("#dateFrom").val(); 
+
+       
+
+        if (dateFromVal !='' && dateToVal !='') {
+
+            $.ajax({
+                url: "/Guest/BookingSave",
+                type: 'post',
+                data: { room_id: roomID, price: priceVal, dateTo: dateToVal, dateFrom: dateFromVal },
+                success: function () {
+                    alert("Soba rezervirana.");
+                    ReservedRooms();
+                    pp.hide();
+                },
+                error: function (status, error) {
+                    alert("An AJAX error occured: " + status + "\nError: " + error);
+                }
+            });
+        }
+        else {
+            alert("Niste unijeli potrebne datume!");
+        }
     }
 
     function ReservedRooms() {
@@ -240,20 +248,21 @@ else
         var dateToVal = $("#dateTo").val();
         var dateFromVal = $("#dateFrom").val();      
                 
-             
-        $.ajax({
-            url: "/Guest/BookingUpdate",
-            type: 'post',
-            data: {book_id:bookID,price:price,dateFrom: dateFromVal,dateTo: dateToVal },
-            success: function () {
-                alert("Rezervacija promjenjena.");
-                ReservedRooms();
-                pp.hide();
-            },
-            error: function (status, error) {
-                alert("An AJAX error occured: " + status + "\nError: " + error);
-            }
-        });
+         if (dateFromVal != '' && dateToVal != '') {
+             $.ajax({
+                 url: "/Guest/BookingUpdate",
+                 type: 'post',
+                 data: { book_id: bookID, price: price, dateFrom: dateFromVal, dateTo: dateToVal },
+                 success: function () {
+                     alert("Rezervacija promjenjena.");
+                     ReservedRooms();
+                     pp.hide();
+                 },
+                 error: function (status, error) {
+                     alert("An AJAX error occured: " + status + "\nError: " + error);
+                 }
+             });
+         }
     }
 
     function Close() {

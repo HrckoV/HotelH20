@@ -155,8 +155,8 @@ namespace HotelH20App.Controllers
             conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
             
             try
-            {
-                book.SaveBooking(conn, guest_id,room_id, price, dateTo, dateFrom);
+            {           
+                 book.SaveBooking(conn, guest_id, room_id, price, dateTo, dateFrom);               
             }
             catch (Exception ex)
             {
