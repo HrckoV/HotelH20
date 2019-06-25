@@ -1,0 +1,94 @@
+﻿@{ 
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Session["userName"] != null)
+{
+    <br /><br />
+    <h1>HOTEL H20  --__ DOBRO DOŠLI !! __--</h1><br />
+    <label id="userName">Login User : @HttpContext.Current.Session["userName"]</label>
+    <div class="col-md-2">
+        <div style="margin-top:60px;width:700px;">
+            <div id="main-content" class="form-group" style="float: left; width: 200px;">
+                <label id="userName">Odaberite grad :</label><br />
+                <select id="citiesList">
+                    <option value="Select">-----</option>
+                </select>
+            </div>
+            <div id="main-content" class="form-group" style="float: left; width: 200px;">
+                <label id="userName">Hoteli :</label><br />
+                <select id="hotelList"></select>
+            </div>
+        </div><br />
+        <div id="main-content" class="form-group">
+                <input type="submit" id="btnBooking" onclick="GetRooms();return false" disabled />
+        </div>           
+    </div>
+}
+
+<script>
+    $(function () {
+
+        AjaxCall('/Guest/GetCity', null).done(function (response) {
+            if (response.length > 0) {                
+                $.each(response, function (index, item) {
+                    $("#citiesList").append($("<option></option>").attr("value", item.City_ID).text(item.City_Name));
+                });
+            }
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+
+
+        $('#citiesList').on("change", function () {
+            var cityID = $("#citiesList option:selected").val();
+            var obj = { city_id: cityID };
+
+            AjaxCall('/Guest/GetHotel', JSON.stringify(obj), 'POST').done(function (response) {
+                if (response.length > 0) {
+                    $('#hotelList').html('');                   
+                    var options = '';
+                    options += '<option value="Select">-----</option>';
+                    $("#hotelList").append(options);
+                    $.each(response, function (index, item) {
+                        $("#hotelList").append($("<option></option>").attr("value", item.Hotel_ID).text(item.Hotel_Name));
+                    });
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+
+        $('#hotelList').on("change", function () {
+             $(':input[type="submit"]').prop('disabled', false);
+        });
+
+    });
+
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'GET',
+            data: data,
+            contentType: 'application/json'
+        });
+    }
+
+    function GetRooms() {
+
+                var hotelID = $("#hotelList option:selected").val();
+                var hotelName = $("#hotelList option:selected").text();
+
+                sessionStorage.hotelID = hotelID;
+                sessionStorage.hotelName = hotelName;
+
+
+                document.location = '/Guest/Booking';
+
+            }
+
+</script>

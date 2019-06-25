@@ -1,0 +1,116 @@
+﻿@model IEnumerable<H20.Entities.Room>
+
+@{
+    var rows = 1;
+
+    if (ViewBag.TotalRows > 0)
+    {
+        rows = ViewBag.TotalRows;
+    }
+
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "gridBooking");
+    grid.Bind(source: Model, rowCount: rows);
+
+}
+
+<style>
+    .gTable {
+        border-collapse: collapse;
+        border: 1px solid black;
+        width: 100%;
+    }
+
+        .gTable tr td {
+            padding: 5px;
+            border: 1px solid grey;
+            color: navy;
+        }
+
+        .gTable th {
+            background-color: grey;
+            text-align: left;
+        }
+
+            .gTable th a {
+                color: white;
+                font-family: Arial;
+                font-size: 14px;
+            }
+
+        .gTable tr:nth-child(2n+1) {
+            background-color: grey;
+            color: white;
+        }
+
+        .gTable tr th {
+            background-color: dimgrey;
+            color: white;
+        }
+
+        .gTable tr td hover {
+            background-color: dimgrey;
+            color: black;
+        }
+
+    .selectedRow {
+        background-color: #ffd800;
+        color: black;
+    }
+
+    .clickable {
+        cursor: pointer;
+        background: #ffff99;
+    }
+
+    .slidingDiv {
+        height: 300px;
+        background-color: black;
+        padding: 20px;
+        margin-top: 10px;
+        border-bottom: 5px solid #3399FF;
+        width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .mealType {
+        width: 250px;
+    }
+
+    /*.show_hide {
+            display: none;
+        }*/
+
+
+
+</style>
+
+<div>
+    <hr />
+    <h2>Hotel H20 - Room Booking</h2>
+    <dl class="dl-horizontal"></dl><br />
+    <h4>Selected hotel : @ViewBag.HotelName</h4>
+</div>
+<div id="gridBooking" style="margin-top:45px;">
+    @grid.GetHtml(tableStyle: "gTable", mode: WebGridPagerModes.All,
+         firstText: "<< First",
+         previousText: "< Prev",
+         nextText: "Next >",
+         lastText: "Last >>",
+         headerStyle: "header",
+         alternatingRowStyle: "alt",
+         selectedRowStyle: "select",
+         footerStyle: "table-pager",
+         columns: grid.Columns(grid.Column(header: " ",
+         format: @<text><img src="@Url.Content("../../Content/images/add.png")"
+                             style="cursor: pointer" onclick="return GetSelectedRow(this); return false;"
+                             alt="Add" title="Room - reserve" /></text>),
+        grid.Column("Room_ID", "Room ID"),
+        grid.Column("Name", "Soba"),
+        grid.Column("Number_Of_Beds", "Broj kreveta"),
+        grid.Column("Price_Per_Night", "Cijena noćenja")
+        ))
+
+
+</div>
