@@ -157,6 +157,7 @@
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\edit.png" />
     <Content Include="Content\images\logoBack.jpg" />
+    <Content Include="Content\images\planeSearch.jpeg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\sol.css" />
@@ -334,9 +335,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Guest\Login.cshtml" />
     <Content Include="Views\Guest\Home.cshtml" />
-    <Content Include="Views\Guest\Booking.cshtml" />
-    <Content Include="Views\Guest\BookingGrid.cshtml" />
-    <Content Include="Views\Guest\BookedGrid.cshtml" />
+    <Content Include="Views\Guest\Letovi.cshtml" />
+    <Content Include="Views\Guest\gridLet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -353,10 +353,6 @@
     <ProjectReference Include="..\H20.Entities\H20.Entities.csproj">
       <Project>{00ea60d4-8b5f-4f45-b2ef-cfca70381ac4}</Project>
       <Name>H20.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\H20.Service\H20.Service.csproj">
-      <Project>{a8641575-d693-43f2-a309-bfedaa6c2071}</Project>
-      <Name>H20.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

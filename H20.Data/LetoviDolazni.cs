@@ -7,18 +7,18 @@ using System.Data;
 
 namespace H20.Data
 {
-    public class Cities
+    public class LetoviDolazni
     {
         
-        public IEnumerable<City> GetCity(IDbConnection conn)
+        public IEnumerable<LetDolazni> DohvvatiLetDol(IDbConnection conn)
         {
             using (conn)
             {
-                var cities = conn.Query<City>("dbo.GetCity").AsList<City>();
+                var letDol = conn.Query<LetDolazni>("dbo.DohvatiLetDol").AsList<LetDolazni>();
 
                 conn.Close();
 
-                return cities;
+                return letDol;
             }            
         }
     }

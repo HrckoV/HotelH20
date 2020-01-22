@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelH20.Web", "HotelH20App\HotelH20.Web.csproj", "{620E7CD5-BA35-4AB9-BECA-459C9D4518D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetoviH2O", "HotelH20App\LetoviH2O.csproj", "{620E7CD5-BA35-4AB9-BECA-459C9D4518D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H20.Data", "H20.Data\H20.Data.csproj", "{0A3C5AB5-1358-49CE-867B-90029BB809E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H20.Data", "H20.Data\H20.Data.csproj", "{0A3C5AB5-1358-49CE-867B-90029BB809E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H20.Service", "H20.Service\H20.Service.csproj", "{A8641575-D693-43F2-A309-BFEDAA6C2071}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H20.Entities", "H20.Entities\H20.Entities.csproj", "{00EA60D4-8B5F-4F45-B2EF-CFCA70381AC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H20.Entities", "H20.Entities\H20.Entities.csproj", "{00EA60D4-8B5F-4F45-B2EF-CFCA70381AC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{0A3C5AB5-1358-49CE-867B-90029BB809E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3C5AB5-1358-49CE-867B-90029BB809E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A3C5AB5-1358-49CE-867B-90029BB809E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8641575-D693-43F2-A309-BFEDAA6C2071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8641575-D693-43F2-A309-BFEDAA6C2071}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8641575-D693-43F2-A309-BFEDAA6C2071}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8641575-D693-43F2-A309-BFEDAA6C2071}.Release|Any CPU.Build.0 = Release|Any CPU
 		{00EA60D4-8B5F-4F45-B2EF-CFCA70381AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{00EA60D4-8B5F-4F45-B2EF-CFCA70381AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00EA60D4-8B5F-4F45-B2EF-CFCA70381AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU

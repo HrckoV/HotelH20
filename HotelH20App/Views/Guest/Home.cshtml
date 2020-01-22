@@ -1,40 +1,98 @@
-﻿@{ 
+﻿@{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
+
 @if (Session["userName"] != null)
 {
-    <br /><br />
-    <h1>HOTEL H20  --__ DOBRO DOŠLI !! __--</h1><br />
+    <br />
+    <br />
+    <h1>LETOVI H20  --__ DOBRO DOŠLI !! __--</h1>
+    <br />
     <label id="userName">Login User : @HttpContext.Current.Session["userName"]</label>
-    <div class="col-md-2">
-        <div style="margin-top:60px;width:700px;">
+    <div class="col-md-12">
+        <div style="margin-top:30px;width:700px;">
+
             <div id="main-content" class="form-group" style="float: left; width: 200px;">
-                <label id="userName">Odaberite grad :</label><br />
-                <select id="citiesList">
+                <label id="userName">Polazni aerodrom :</label><br />
+                <select id="dolazniLetovi" style="width:100px;">
                     <option value="Select">-----</option>
                 </select>
             </div>
             <div id="main-content" class="form-group" style="float: left; width: 200px;">
-                <label id="userName">Hoteli :</label><br />
-                <select id="hotelList"></select>
+                <label id="userName">Odlazni aerodrom :</label><br />
+                <select id="odlazniLetovi" style="width:100px;">
+                    <option value="Select">-----</option>
+                </select>
             </div>
-        </div><br />
+
+            <div style="width:200px">&nbsp;</div>
+
+            <div style="float:left;width: 200px;">
+                <label id="datPolaska">Datum polaska :</label><br />
+                @Html.TextBox("DatumPolaska", null, new { style = "width: 100px;" })
+            </div>
+            <div style="float:left;width: 200px;">
+                <label id="datPovratka">Datum povratka :</label><br />
+                @Html.TextBox("DatumPovratka", null, new { style = "width: 100px;" })
+            </div>
+
+            <div style="width:200px">&nbsp;</div>
+
+            <div style="float:left;width: 200px;">
+                <label id="brPutnika">Broj putnika :</label><br />
+                @Html.TextBox("BrojPutnika", 0, new { style = "width: 100px;" })
+            </div>
+            <div style="float:left;width: 200px;">
+                <label id="userName">Valuta :</label><br />
+                <select id="valuta" style="width:100px;">
+                    <option value="Select">-----</option>
+                    <option value="1">HRK</option>
+                    <option value="2">EUR</option>
+                    <option value="3">USD</option>
+                </select>
+            </div>
+
+        </div>
+
         <div id="main-content" class="form-group">
-                <input type="submit" id="btnBooking" onclick="GetRooms();return false" disabled />
-        </div>           
+            <input type="submit" id="btnLetovi" title="Traži..." value="Traži..." onclick="GetLetove();return false" />
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="grContent">
+                    @Html.Partial("gridLet", new List<H20.Entities.Let> { new H20.Entities.Let() })
+                </div>
+            </div>
+        </div>
     </div>
 }
 
+
+
 <script>
+
     $(function () {
 
-        AjaxCall('/Guest/GetCity', null).done(function (response) {
-            if (response.length > 0) {                
+        AjaxCall('/Guest/DohvatiLetoviDolazni', null).done(function (response) {
+            if (response.length > 0) {
                 $.each(response, function (index, item) {
-                    $("#citiesList").append($("<option></option>").attr("value", item.City_ID).text(item.City_Name));
+                    $("#dolazniLetovi").append($("<option></option>").attr("value", item.ID).text(item.PolazniAerodrom));
+                });
+            }
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+
+        AjaxCall('/Guest/DohvatiLetoviOdlazni', null).done(function (response) {
+            if (response.length > 0) {
+                $.each(response, function (index, item) {
+                    $("#odlazniLetovi").append($("<option></option>").attr("value", item.ID).text(item.OdredisniAerodrom));
                 });
             }
 
@@ -43,29 +101,9 @@
         });
 
 
-        $('#citiesList').on("change", function () {
-            var cityID = $("#citiesList option:selected").val();
-            var obj = { city_id: cityID };
+        $("#DatumPovratka").datepicker({ dateFormat: "dd.mm.yy" }).val();
+        $("#DatumPolaska").datepicker({ dateFormat: "dd.mm.yy" }).val();
 
-            AjaxCall('/Guest/GetHotel', JSON.stringify(obj), 'POST').done(function (response) {
-                if (response.length > 0) {
-                    $('#hotelList').html('');                   
-                    var options = '';
-                    options += '<option value="Select">-----</option>';
-                    $("#hotelList").append(options);
-                    $.each(response, function (index, item) {
-                        $("#hotelList").append($("<option></option>").attr("value", item.Hotel_ID).text(item.Hotel_Name));
-                    });
-                }
-            }).fail(function (error) {
-                alert(error.StatusText);
-            });
-        });
-
-
-        $('#hotelList').on("change", function () {
-             $(':input[type="submit"]').prop('disabled', false);
-        });
 
     });
 
@@ -78,17 +116,31 @@
         });
     }
 
-    function GetRooms() {
+    function GetLetove() {
 
-                var hotelID = $("#hotelList option:selected").val();
-                var hotelName = $("#hotelList option:selected").text();
+        var dolLet = $("#dolazniLetovi option:selected").text();
+        var odlazniLet = $("#odlazniLetovi option:selected").text();
 
-                sessionStorage.hotelID = hotelID;
-                sessionStorage.hotelName = hotelName;
+        var datPolaska = $("#DatumPolaska").val();
+        var datPovratka = $("#DatumPovratka").val();
+        var brPutnika = $("#BrojPutnika").val();
+
+        var val = $("#valuta option:selected").text();
 
 
-                document.location = '/Guest/Booking';
 
+        $.ajax({
+            url: "/Guest/LetoviTrazi",
+            type: 'GET',
+            data: { polazniLet: dolLet, dolazniLet: odlazniLet, datumPolaska: datPolaska, datumDolaska: datPovratka, brojPutnika: brPutnika, valuta: val, gView: "gridLet" },
+            success: function (data) {
+                $("#grContent").html(data);
+            },
+            error: function (status, error) {
+                alert("An AJAX error occured: " + status + "\nError: " + error);
             }
+        });
+
+    }
 
 </script>

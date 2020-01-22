@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -62,8 +63,9 @@ namespace H20.Entities
             return "";
         }
 
-        public string Decrypt(string value)
+        public string Decrypt(string value, bool useHashing, bool password)
         {
+            
             if (value.Length != 0)
             {
                 try
@@ -74,16 +76,25 @@ namespace H20.Entities
                     byte[] toEncryptArray = Convert.FromBase64String(value);
 
                     string key;
-                    key = s1 + s2 + s1 + s3 + s4 + s2 + s5 + s3 + s6;
+                    if (password) key = s1 + s2 + s1 + s3 + s4 + s2 + s5 + s3 + s6;
+                    else key = s3 + s2 + s6 + s5 + s1 + s4 + s1 + s5 + s2;
 
-                    using (MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider())
+                    if (useHashing)
+                    {
+                        //if hashing was used get the hash code with regards to your key
+                        using (MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider())
                         {
                             keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
                             //release any resource held by the MD5CryptoServiceProvider
 
                             hashmd5.Clear();
                         }
-                
+                    }
+                    else
+                    {
+                        //if hashing was not implemented get the byte code of the key
+                        keyArray = UTF8Encoding.UTF8.GetBytes(key);
+                    }
 
                     byte[] resultArray;
 
@@ -105,11 +116,16 @@ namespace H20.Entities
                     //return the Clear decrypted TEXT
                     return UTF8Encoding.UTF8.GetString(resultArray);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    var error = e.Message + " " + e.Source;
+
+                    var st = 0;
                 }
             }
             return "";
         }
+
+       
     }
 }

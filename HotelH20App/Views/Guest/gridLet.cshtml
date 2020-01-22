@@ -1,4 +1,4 @@
-﻿@model IEnumerable<H20.Entities.Booking>
+﻿@model IEnumerable<H20.Entities.Let>
 
 @{
     var rows = 1;
@@ -9,7 +9,7 @@
     }
 
 
-    var grid = new WebGrid(canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "gridBooked");
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10, ajaxUpdateContainerId: "gridLet");
     grid.Bind(source: Model, rowCount: rows);
 
 }
@@ -88,7 +88,7 @@
 
 <div>
     <hr />
-    <h2>Booked Rooms</h2>
+    <h2>Popis letova </h2>
     <dl class="dl-horizontal"></dl>    
 </div>
 <div id="gridBooked" style="margin-top:25px;">
@@ -101,22 +101,14 @@
          alternatingRowStyle: "alt",
          selectedRowStyle: "select",
          footerStyle: "table-pager",
-         columns: grid.Columns(grid.Column(header: " ",
-         format: @<text><img src="@Url.Content("../../Content/images/add.png")"
-                             style="cursor: pointer" onclick="return GetBookedRow(this); return false;"
-                             alt="Add" title="Room - edit" /></text>),
-                           grid.Column(header: " ",
-        format: @<text><img src="@Url.Content("../../Content/images/delete.png")"
-                            style="cursor: pointer" onclick="return DeleteReservedRoom(this); return false;"
-                            alt="Add" title="Room - delete" /></text>),
-        grid.Column("Booking_ID", "Booking Br."),
-        grid.Column("Hotel", "Hotel"),
-        grid.Column("Room_ID", "Broj sobe"),
-        grid.Column("Room", "Soba"),
-        grid.Column("Number_Of_Beds", "Broj kreveta"),
-        grid.Column("Price_Per_Night", "Cijena noćenja"),
-        grid.Column("DateFrom", "Datum Od"),
-        grid.Column("DateTo", "Datum Do"),
-        grid.Column("Price", "Ukupna cijena")
+         columns: grid.Columns(
+            grid.Column("ID", "ID"),
+            grid.Column("PolazniAerodrom", "Polazni Aerodrom"),
+            grid.Column("OdredisniAerodrom", "Odredišni Aerodrom"),
+            grid.Column("DatumPolaska", "Datum Polaska"),
+            grid.Column("DatumPovratka", "Datum Povratka"),
+            grid.Column("BrojPutnika", "Broj Putnika"),
+            grid.Column("Valuta", "Valuta"),        
+            grid.Column("Cijena", "Ukupna cijena")
         ))
 </div>

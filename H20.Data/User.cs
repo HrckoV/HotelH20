@@ -12,11 +12,13 @@ namespace H20.Data
         public System.Collections.Generic.List<Guest> UserData(IDbConnection conn,Guest guestData)
         {
 
+            var data = ed.Encrypt(guestData.Guest_Password);
+
             using (conn)
             {
                 var guest = conn.Query<Guest>("dbo.GetUserLoginData @GuestName,@GuestPassword", new
                 {                    
-                    GuestName = guestData.Guest_Username,
+                    GuestName = guestData.Guest_Username,                   
                     GuestPassword = ed.Encrypt(guestData.Guest_Password)
                 }).AsList<Guest>();
 

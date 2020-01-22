@@ -1,0 +1,82 @@
+﻿
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/xdialog.css" rel="stylesheet" />
+<script src="~/Scripts/xdialog.js"></script>
+
+
+
+@if (Session["userName"] != null)
+{
+
+
+
+
+    using (Ajax.BeginForm("BookingSearch", "Guest",
+                    new AjaxOptions
+                    {
+                        HttpMethod = "GET",
+                        UpdateTargetId = "grContent",
+                        InsertionMode = InsertionMode.Replace
+                    }))
+    {
+        <div class="form-horizontal">
+
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="grContent">
+                        @Html.Partial("gridLet", new List<H20.Entities.Let> { new H20.Entities.Let() });
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+
+}
+else
+{
+    Response.Redirect("Login");
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        gridFill();
+
+
+        var pp = null;                    
+    });
+
+    function gridFill() {
+
+        var fID = sessionStorage.fID;
+        var nazivLeta = sessionStorage.nazivLeta;
+
+
+        $.ajax({
+            url: "/Guest/BookingSearch",
+            type: 'GET',
+            data: { hotel_id: hotelID, hotelName: hotelName, gView: "gridLet" },
+            success: function (data) {
+                $("#grContent").html(data);
+                ReservedRooms();
+            },
+            error: function (status, error) {
+                alert("An AJAX error occured: " + status + "\nError: " + error);
+            }
+        });
+    }
+        
+
+</script>
+

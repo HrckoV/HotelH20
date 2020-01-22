@@ -32,7 +32,7 @@ namespace HotelH20App.Controllers
             return View();
         }
 
-        public ActionResult Booking()
+        public ActionResult Letovi()
         {
             return View();
         }
@@ -70,133 +70,51 @@ namespace HotelH20App.Controllers
         }
 
        
-        public JsonResult GetCity()
+        public JsonResult DohvatiLetoviDolazni()
         {
-            Cities cityData = new Cities();
+            LetoviDolazni letData = new LetoviDolazni();
             conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
-            var city = cityData.GetCity(conn);
+            var let = letData.DohvvatiLetDol(conn);
 
-            return Json(city, JsonRequestBehavior.AllowGet);
-        }
-
-      
-        public JsonResult GetHotel(string city_id)
-        {
-            Hotels hotelData = new Hotels();
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-
-
-            var hotel = hotelData.GetHotel(conn,city_id);
-
-            return Json(hotel, JsonRequestBehavior.AllowGet);
+            return Json(let, JsonRequestBehavior.AllowGet);
         }
 
 
-     
-        public ActionResult BookingSearch(string hotel_id,string hotelName,string gView)
+        public JsonResult DohvatiLetoviOdlazni()
+        {
+            LetoviOdlazni letData = new LetoviOdlazni();
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+
+            var let = letData.DohvvatiLetOdl(conn);
+
+            return Json(let, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult LetoviTrazi(string polazniLet,string dolazniLet,string datumPolaska,string datumDolaska,int brojPutnika,string valuta,string gView)
         {
                       
             conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
-            var result = new List<Room>();
-
-            if (hotel_id != null)
-            {
-
-                Rooms roomData = new Rooms();             
-
-                List<Room> roomGrid = roomData.GetRooms(conn, hotel_id);
-                roomGrid.Sort(0, 0, null);
-                result = roomGrid;
-
-
-                ViewBag.TotalRows = result.Count();
-                ViewBag.HotelName = hotelName;
-                
-            }
-
-            return PartialView(gView, result);
-
-        }
-
-        public ActionResult BookedRoomSearch(string gView)
-        {
-            int guestID = int.Parse(Session["userID"].ToString());
-
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-
-            IEnumerable<Booking> result = Enumerable.Empty<Booking>(); 
-
-            if (guestID != 0)
-            {
-
-                Bookings roomData = new Bookings();
-
-                IEnumerable<Booking> roomGrid = roomData.GetBookedRooms(conn, guestID);               
-
-                result = roomGrid;
-
-
-                ViewBag.TotalRows = result.Count();
-               
-
-            }
-
-            return PartialView(gView, result);
-
-        }
-
-        public void BookingSave(int room_id, decimal price, DateTime dateTo, DateTime dateFrom)
-        {
-            var book = new Bookings();
-            int guest_id = int.Parse(Session["userID"].ToString());
-
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            var result = new List<Let>();
             
-            try
-            {           
-                 book.SaveBooking(conn, guest_id, room_id, price, dateTo, dateFrom);               
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message + ' ' + ex.Source);
-            }
+
+                Letovi letData = new Letovi();             
+
+                List<Let> letGrid = letData.DohvatiLetove(conn, polazniLet, dolazniLet,  datumPolaska, datumDolaska, brojPutnika, valuta);
+                letGrid.Sort(0, 0, null);
+                result = letGrid;
+
+
+                ViewBag.TotalRows = result.Count();
+                
+                
+            
+            return PartialView(gView, result);
+
         }
-
-        public void BookingUpdate(int book_id,decimal price, DateTime dateFrom, DateTime dateTo)
-        {
-            var book = new Bookings();          
-
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-
-            try
-            {
-                book.UpdateBooking(conn,book_id,price, dateTo, dateFrom);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message + ' ' + ex.Source);
-            }
-        }
-
-        public void DeleteBooking(int bookingID)
-        {
-            var book = new Bookings();
-
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-
-            try
-            {
-                book.DeleteBooking(conn, bookingID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message + ' ' + ex.Source);
-            }
-        }
-
-
+        
         public ActionResult Home()
         {
             if (Session["userName"] != null)
